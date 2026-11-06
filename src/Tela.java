@@ -5,7 +5,7 @@ public class Tela {
     public Tela(Console console) { this.console = console; }
 
     public void cardapio(Cardapio cardapio) {
-        console.linha("\nCardápio (valores estimados):");
+        console.linha("\nCardápio (preços e tempos da cantina):");
         int posicao = 1;
         for (Item item : cardapio.itens()) {
             console.linha(posicao++ + ") " + item.nome() + "  " + Dinheiro.formatar(item.preco())
