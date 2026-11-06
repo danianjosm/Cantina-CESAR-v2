@@ -4,14 +4,18 @@
 ## O que é o app
 No intervalo, a fila da cantina come boa parte do tempo. Pior: quem quer um item rápido, como a coxinha, espera na mesma fila de quem pediu um item demorado, como a tapioca. Muita gente desiste ou compra fora.
 
-O **Cantina CESAR** é um app de console (PoC) que ajuda o aluno a **se planejar**: ele faz o pedido, sabe quanto tempo falta para ficar pronto e vai buscar na hora certa, **sem enfrentar a fila**.
+O **Cantina CESAR** é um app de console (PoC) que ajuda o aluno a **se planejar** e responde: **"ainda dá tempo de pegar isso?"**
 
-**O que ele faz:**
+**Modo pedido**
+- Pergunta quantos minutos faltam no intervalo
 - Mostra o cardápio com **preço, tempo de preparo e tipo** de cada item (rápido ou preparado na hora)
-- Separa os pedidos em **duas filas**: itens rápidos e itens preparados na hora
-- Mostra **quanto tempo falta** para o pedido ficar pronto, contando a fila
+- Calcula quando o pedido fica pronto pelas **duas filas** (rápida e de preparo), que andam ao mesmo tempo: vale a **fila mais lenta**. Ex.: coxinha (2 min) + cuscuz (10 min) = pronto em ~10 min, e não 12
+- **Avisa se ainda dá tempo** antes de adicionar cada item, e alerta quando vai sobrar pouco tempo para comer
 - Recebe o **pagamento** por Pix, cartão ou vale-refeição
 - Mostra o **status do pedido**: PAGO → EM PREPARO → PRONTO
+- Não fecha com entrada inválida: texto ou opção fora da lista fazem o app perguntar de novo
+
+**Modo simulador:** 30 alunos chegando ao longo de 15 minutos, comparando quantos conseguem comer com **fila única** e com **filas separadas** (ver [Simulador do intervalo](#simulador-do-intervalo)).
 
 ## Pesquisa com a cantina
 
@@ -69,6 +73,19 @@ Objetivo: trocar as estimativas da Entrega 1 por **dados reais**.
 
 > O cardápio real tem mais de 30 itens. Escolhemos 2 rápidos e 2 preparados na hora, que bastam para mostrar as duas filas. O tempo do refrigerante (30 s) é estimativa da equipe, porque não foi perguntado à cantina.
 
+## Simulador do intervalo
+
+30 alunos chegam ao longo de 15 minutos, cada um pede 1 item e precisa de 3 minutos para comer. Os dois cenários têm os **mesmos 2 atendentes**: na fila única, os dois fazem tudo; nas filas separadas, um cuida dos itens rápidos e o outro do preparo, como a cantina já trabalha.
+
+| Cenário | Média de 1000 turmas (quantos comem) |
+|---|---|
+| Fila única | 7,8 de 30 |
+| Filas separadas | 8,2 de 30 |
+
+**O que descobrimos:** esperávamos que separar as filas fizesse muito mais gente comer, mas, com os dados reais, a diferença é pequena. Com 2 atendentes para 30 alunos, o limite é a **capacidade**, e o gargalo é o **cuscuz de 10 minutos**. O ganho das filas separadas é a **previsibilidade**: quem pede coxinha não fica preso atrás da tapioca, e o app consegue dizer se ainda dá tempo.
+
+**Próximo passo sugerido pelos dados:** a cantina contou que o cuscuz pode ser adiantado. Simular esse cenário é uma classe nova, sem mexer no resto.
+
 ## Decisões da stack
 | Decisão | Escolha | Motivo |
 |---|---|---|
@@ -80,13 +97,31 @@ Objetivo: trocar as estimativas da Entrega 1 por **dados reais**.
 
 ## Papel dos integrantes
 
+**Entrega 2**
+
+| Integrante | Papel |
+|---|---|
+| Athos | Código: refatoração do `Main`, `Pedido` encapsulado, filas, estimador de tempo e simulador; docs `ESTRUTURA.md` e `ANTES_E_DEPOIS.md` |
+| Dani | README, repositório (histórico da v1, `main` protegida, fluxo de pull requests) e dados reais da cantina no código |
+| França | 2ª conversa com a cantina: tempos de preparo, preços e fotos do cardápio |
+| Caio | Revisão de pull requests e relação dos princípios com o livro (`docs/PRINCIPIOS_X_LIVRO.md`) |
+
 <details>
-<summary>Papéis da Entrega 1 (os da Entrega 2 entram quando o código começar)</summary>
+<summary>Papéis da Entrega 1</summary>
 
-
-Todos os integrantes sabem explicar o projeto, e a IA ajudou a escrever o código.
+| Integrante | Papel |
+|---|---|
+| Athos | Código principal (`Main`, `Pedido`) e repositório no GitHub |
+| Dani | Vídeo: gravação, edição e legenda |
+| Arthur | Classes de itens (`Item`, `Coxinha`, `Refrigerante`, `Tapioca`, `Cuscuz`) |
+| Almeida | Classes de pagamento (`Pagamento`, `Pix`, `CartaoCredito`, `ValeRefeicao`) |
+| Pierre | README e documentação (`docs/ESTRUTURA.md`) |
+| Caio | Testes do fluxo no terminal e conferência dos princípios no código |
+| André | Roteiro do vídeo e pesquisa (entrevistas, estimativas de preço e tempo) |
 
 </details>
+
+Todos os integrantes sabem explicar o projeto, e a IA ajudou a escrever o código.
 
 ## Como rodar
 
@@ -114,6 +149,9 @@ java -Dfile.encoding=UTF-8 -cp out Main
 **Alternativas:** abrir a pasta no IntelliJ ou VS Code (extensão *Extension Pack for Java*) e clicar em Run no `Main.java`; ou usar o **GitHub Codespaces** (*Code → Codespaces*), que já vem com Java.
 
 ## Onde estão os princípios no código
+
+> A relação de cada princípio com o livro *Engenharia de Software Moderna* (Marco Tulio Valente), capítulo por capítulo, está em [`docs/PRINCIPIOS_X_LIVRO.md`](docs/PRINCIPIOS_X_LIVRO.md).
+
 | Princípio | Onde | Como aparece |
 |---|---|---|
 | Responsabilidade Única | `Main` (só monta), `Console` (só lê), `Tela` (só mostra), `FluxoDePedido` (só orquestra), `PoliticaDeTempo` (regra do "dá tempo?"), `Cardapio` (itens) | o `Main` deixou de ter tela, regra de tempo e cardápio |
@@ -123,7 +161,7 @@ java -Dfile.encoding=UTF-8 -cp out Main
 | Ocultamento de informação | `Pedido` (itens e status privados), `CartaoCredito.limite`, `ValeRefeicao.saldo` | `pedido.itens()` devolve cópia imutável; status só muda por `pagarCom` e `avancar` |
 | Coesão | `StatusPedido` (transições num lugar só), `Dinheiro` (formatação) | cada classe usa todos os seus atributos |
 | Acoplamento | `FluxoDePedido` não conhece `Coxinha`, `Pix` nem `FilaRapida` | trocar a fila no `Main` não toca no fluxo |
-| Lei de Demeter | `pedido.pagarCom(pagamento)`, `pedido.itensCom(item)` | ninguém encadeia `pedido.getX().getY()` |
+| Lei de Demeter | `pedido.pagarCom(pagamento)`, `pedido.itensCom(item)` | parcial: o `Pedido` não expõe sua estrutura, mas a `Tela` ainda encadeia `pedido.status().rotulo()` e `item.tipo().rotulo()` |
 | Substituição de Liskov | `FilaUnica`, `FilaRapida`, `FilaPreparo` e os dois estimadores | qualquer um entra no lugar do outro sem quebrar `PoliticaDeTempo` nem `Simulador` |
 | Composição em vez de herança | `PoliticaDeTempo` tem um estimador; `EstimadorPorFilas` tem filas | nenhuma classe de domínio herda de outra (só implementam interfaces) |
 | Integridade conceitual | itens, pagamentos e filas seguem o mesmo padrão | catálogos `Cardapio` e `MeiosDePagamento` são análogos |

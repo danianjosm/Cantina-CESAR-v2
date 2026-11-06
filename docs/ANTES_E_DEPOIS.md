@@ -11,7 +11,7 @@ if (pedido.tempo() + escolhido.tempo() + 3 <= minutos) {
 **Depois**:
 ```java
 // PoliticaDeTempo
-return estimador.minutosAtePronto(pedido.itensCom(novo)) + MINUTOS_PARA_COMER;
+return estimador.minutosAtePronto(pedido.itensCom(novo));   // fila mais lenta
 // FluxoDePedido
 int opcao = console.lerInteiro("Escolha um item (0 para finalizar): ", 0, cardapio.itens().size());
 pedido.adicionar(item);                              // valida estado do pedido
@@ -35,5 +35,5 @@ Método: complexidade ciclomática = 1 + `if`, `for`, `while`, `case`, `catch`, 
 | CBO do `Main` | 10 | 13 |
 | Classes | 11 | 35 |
 
-Panorama geral: a complexidade do `Main` dininuiu e nenhuma classe passa de 5. O CBO do `Main` **subiu**, e isso é esperado: ele virou a raiz de composição, o único lugar que conhece as classes concretas para ligá-las. O acoplamento ficou concentrado ali, e o resto (`FluxoDePedido`, `PoliticaDeTempo`) depende de interfaces. O preço foi ter mais classes, cada uma pequena.
+Panorama geral: a complexidade do `Main` diminuiu e nenhuma classe passa de 5. O CBO do `Main` **subiu**, e isso é esperado: ele virou a raiz de composição, o único lugar que conhece as classes concretas para ligá-las. O acoplamento ficou concentrado ali, e o resto (`FluxoDePedido`, `PoliticaDeTempo`) depende de interfaces. O preço foi ter mais classes, cada uma pequena.
 
