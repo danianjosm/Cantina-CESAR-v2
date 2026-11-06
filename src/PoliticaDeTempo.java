@@ -1,4 +1,4 @@
-/** preparo do pedido + tempo para comer cabe nos minutos que restam. */
+
 public class PoliticaDeTempo {
     public static final int MINUTOS_PARA_COMER = 3;
 
@@ -6,11 +6,15 @@ public class PoliticaDeTempo {
 
     public PoliticaDeTempo(EstimadorDeTempo estimador) { this.estimador = estimador; }
 
-    public int minutosNecessarios(Pedido pedido, Item novo) {
-        return estimador.minutosAtePronto(pedido.itensCom(novo)) + MINUTOS_PARA_COMER;
+    public int minutosAtePronto(Pedido pedido, Item novo) {
+        return estimador.minutosAtePronto(pedido.itensCom(novo));
     }
 
-    public boolean daTempo(Pedido pedido, Item novo, int minutosRestantes) {
-        return minutosNecessarios(pedido, novo) <= minutosRestantes;
+    public boolean daTempo(int minutosAtePronto, int minutosRestantes) {
+        return minutosAtePronto <= minutosRestantes;
+    }
+
+    public boolean sobraTempoParaComer(int minutosAtePronto, int minutosRestantes) {
+        return minutosRestantes - minutosAtePronto >= MINUTOS_PARA_COMER;
     }
 }
