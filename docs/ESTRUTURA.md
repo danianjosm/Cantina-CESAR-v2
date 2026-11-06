@@ -34,7 +34,7 @@ Cantina-CESAR/
 | `Tela` | só apresentação (usa `Dinheiro` e `TipoItem.rotulo()`) |
 | `Pedido` | itens e status privados; `adicionar`, `itens()` (cópia imutável), `itensCom`, `total`, `pagarCom`, `avancar` |
 | `StatusPedido` | enum CRIADO → PAGO → EM_PREPARO → PRONTO; `proximo()` impede passos inválidos |
-| `PoliticaDeTempo` | `tempo do estimador + 3 min para comer <= minutos que faltam` |
+| `PoliticaDeTempo` | "dá tempo?" = pedido pronto (pelo estimador) <= minutos que faltam; avisa se sobram menos de 3 min para comer |
 | `EstimadorPorFilas` | tempo do pedido = tempo da **fila mais lenta** |
 | `EstimadorFilaUnica` | soma tudo (a cantina de hoje) |
 | `FluxoDePedido` | orquestra o diálogo do pedido, sem regra de tempo nem formatação |
@@ -43,7 +43,7 @@ Cantina-CESAR/
 ## Fluxo do pedido
 ```
 1. Console.lerInteiro: minutos (1 a 15)
-2. loop: Tela.cardapio -> escolha -> PoliticaDeTempo.minutosNecessarios <= minutos? adiciona : recusa
+2. loop: Tela.cardapio -> escolha -> PoliticaDeTempo.minutosAtePronto -> daTempo? adiciona (e avisa se sobra pouco para comer) : recusa
 3. Tela.resumo
 4. loop de pagamento: escolha (0 cancela) -> pedido.pagarCom(meio); recusado = tenta outro
 5. pedido.avancar(): PAGO -> EM PREPARO -> PRONTO

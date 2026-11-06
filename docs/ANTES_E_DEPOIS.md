@@ -11,7 +11,7 @@ if (pedido.tempo() + escolhido.tempo() + 3 <= minutos) {
 **Depois**:
 ```java
 // PoliticaDeTempo
-return estimador.minutosAtePronto(pedido.itensCom(novo)) + MINUTOS_PARA_COMER;
+return estimador.minutosAtePronto(pedido.itensCom(novo));   // fila mais lenta
 // FluxoDePedido
 int opcao = console.lerInteiro("Escolha um item (0 para finalizar): ", 0, cardapio.itens().size());
 pedido.adicionar(item);                              // valida estado do pedido
