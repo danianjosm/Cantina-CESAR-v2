@@ -1,4 +1,3 @@
-/** monta o pedido, cobra e acompanha o status. */
 public class FluxoDePedido implements Modo {
     private static final int MAX_MINUTOS = 15;
 
@@ -46,14 +45,18 @@ public class FluxoDePedido implements Modo {
     }
 
     private void tentarAdicionar(Pedido pedido, Item item, int minutos) {
-        int necessarios = politica.minutosNecessarios(pedido, item);
-        if (necessarios <= minutos) {
-            pedido.adicionar(item);
-            console.linha("Dá tempo! Adicionado: " + item.nome() + " (precisa de ~" + necessarios
-                    + " min com " + PoliticaDeTempo.MINUTOS_PARA_COMER + " para comer; faltam " + minutos + ")");
-        } else {
-            console.linha("Não dá tempo de pegar " + item.nome() + " (precisaria de ~" + necessarios
-                    + " min e faltam " + minutos + ").");
+        int prontoEm = politica.minutosAtePronto(pedido, item);
+        if (!politica.daTempo(prontoEm, minutos)) {
+            console.linha("Não dá tempo de pegar " + item.nome() + " (o pedido ficaria pronto em ~"
+                    + prontoEm + " min e faltam " + minutos + ").");
+            return;
+        }
+        pedido.adicionar(item);
+        console.linha("Dá tempo! Adicionado: " + item.nome() + " (pedido pronto em ~" + prontoEm
+                + " min; faltam " + minutos + ").");
+        if (!politica.sobraTempoParaComer(prontoEm, minutos)) {
+            console.linha("Atenção: vai sobrar pouco tempo para comer (menos de "
+                    + PoliticaDeTempo.MINUTOS_PARA_COMER + " min).");
         }
     }
 
