@@ -114,14 +114,20 @@ java -Dfile.encoding=UTF-8 -cp out Main
 **Alternativas:** abrir a pasta no IntelliJ ou VS Code (extensão *Extension Pack for Java*) e clicar em Run no `Main.java`; ou usar o **GitHub Codespaces** (*Code → Codespaces*), que já vem com Java.
 
 ## Onde estão os princípios no código
-Esta é a versão **go-horse** (feita para rodar rápido): parte dos princípios já aparece no código, e o restante será aplicado na PoC final.
-
-| Princípio | Onde | Status |
+| Princípio | Onde | Como aparece |
 |---|---|---|
-| Inversão de Dependências | `Item.java`, `Pagamento.java`: o `Main` trabalha com as interfaces, não com as classes concretas | 
-| Aberto/Fechado | `Pix`, `CartaoCredito`, `ValeRefeicao`, `Coxinha`, `Tapioca`...: novo item ou pagamento = classe nova, sem mexer nas outras | (o `Main` ainda registra à mão) |
-| Segregação de Interfaces | `Item` (4 métodos) e `Pagamento` (2 métodos) são pequenas | 
-| Ocultamento de informação | `limite` e `saldo` privados em `CartaoCredito` e `ValeRefeicao` | parcial: `Pedido.status` e `Pedido.itens` são públicos |
-| Responsabilidade Única / Coesão | `Main.java` mistura tela, regra de tempo e fluxo | a corrigir |
-| Integridade conceitual | itens seguem o mesmo padrão; pagamentos também | parcial |
+| Responsabilidade Única | `Main` (só monta), `Console` (só lê), `Tela` (só mostra), `FluxoDePedido` (só orquestra), `PoliticaDeTempo` (regra do "dá tempo?"), `Cardapio` (itens) | o `Main` deixou de ter tela, regra de tempo e cardápio |
+| Aberto/Fechado | `Fila`, `EstimadorDeTempo`, `Item`, `Pagamento`, `Modo` | `EstimadorPorFilas` e `ModoSimulador` entraram como classes novas, sem alterar o fluxo do pedido |
+| Inversão de Dependências | `PoliticaDeTempo` depende de `EstimadorDeTempo`; `FluxoDePedido` depende de interfaces e catálogos | só o `Main` conhece as classes concretas |
+| Segregação de Interfaces | `Item`, `Pagamento`, `Fila`, `EstimadorDeTempo`, `Modo` | todas com 1 a 4 métodos |
+| Ocultamento de informação | `Pedido` (itens e status privados), `CartaoCredito.limite`, `ValeRefeicao.saldo` | `pedido.itens()` devolve cópia imutável; status só muda por `pagarCom` e `avancar` |
+| Coesão | `StatusPedido` (transições num lugar só), `Dinheiro` (formatação) | cada classe usa todos os seus atributos |
+| Acoplamento | `FluxoDePedido` não conhece `Coxinha`, `Pix` nem `FilaRapida` | trocar a fila no `Main` não toca no fluxo |
+| Lei de Demeter | `pedido.pagarCom(pagamento)`, `pedido.itensCom(item)` | ninguém encadeia `pedido.getX().getY()` |
+| Substituição de Liskov | `FilaUnica`, `FilaRapida`, `FilaPreparo` e os dois estimadores | qualquer um entra no lugar do outro sem quebrar `PoliticaDeTempo` nem `Simulador` |
+| Composição em vez de herança | `PoliticaDeTempo` tem um estimador; `EstimadorPorFilas` tem filas | nenhuma classe de domínio herda de outra (só implementam interfaces) |
+| Integridade conceitual | itens, pagamentos e filas seguem o mesmo padrão | catálogos `Cardapio` e `MeiosDePagamento` são análogos |
+| Métricas | `docs/ANTES_E_DEPOIS.md` | complexidade ciclomática do `Main`: 11 → 2 |
+
+Mais detalhes: `docs/ESTRUTURA.md` (classes e fluxo), `docs/ANTES_E_DEPOIS.md` 
 
