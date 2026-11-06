@@ -1,23 +1,73 @@
-# Cantina CESAR (versão go-horse)
+# Cantina CESAR
 
 
 ## O que é o app
-Nos 15 minutos de intervalo, a fila da cantina come metade do tempo. Pior: quem quer um item rápido, como a coxinha, espera na mesma fila de quem pediu um item demorado, como a tapioca. Muita gente desiste ou compra fora.
+No intervalo, a fila da cantina come boa parte do tempo. Pior: quem quer um item rápido, como a coxinha, espera na mesma fila de quem pediu um item demorado, como a tapioca. Muita gente desiste ou compra fora.
 
-O **Cantina CESAR** é um app de console (PoC) que responde à pergunta do aluno: **"ainda dá tempo de pegar isso?"**
+O **Cantina CESAR** é um app de console (PoC) que ajuda o aluno a **se planejar**: ele faz o pedido, sabe quanto tempo falta para ficar pronto e vai buscar na hora certa, **sem enfrentar a fila**.
 
-**O que ele faz hoje:**
-- Mostra o cardápio com **preço, tempo estimado e tipo** de cada item (rápido ou preparado na hora)
-- Pergunta **quantos minutos faltam** no intervalo
-- **Avisa se ainda dá tempo** a cada item adicionado ao pedido (já reservando 3 minutos para comer)
+**O que ele faz:**
+- Mostra o cardápio com **preço, tempo de preparo e tipo** de cada item (rápido ou preparado na hora)
+- Separa os pedidos em **duas filas**: itens rápidos e itens preparados na hora
+- Mostra **quanto tempo falta** para o pedido ficar pronto, contando a fila
 - Recebe o **pagamento** por Pix, cartão ou vale-refeição
 - Mostra o **status do pedido**: PAGO → EM PREPARO → PRONTO
 
-**Base da ideia:** entrevistas com 6 pessoas da equipe e 1 conversa com a cantina. Ainda não ouvimos alunos de fora.
+## Pesquisa com a cantina
 
-**Próximo passo (PoC final):** separar os pedidos em fila de itens rápidos e fila de itens preparados na hora.
+O app foi construído a partir de 3 pesquisas: uma com alunos e duas com a cantina (Quiosque Imperial Brum).
 
-> Preços e tempos de preparo são **estimados** (não temos os dados reais da cantina ainda).
+### 1. Entrevistas com alunos (30/10)
+6 entrevistas sobre a experiência no intervalo, com alunos da própria equipe (amostra pequena; ainda não ouvimos alunos de fora).
+
+| O que ouvimos | Quantos |
+|---|---|
+| Fila grande ou espera longa | 4 de 6 |
+| Desistiu ou mudou de plano por causa da fila | 3 de 6 |
+| Foi tranquilo quando havia pouco movimento | 3 de 6 |
+| Pagar foi a pior parte | 2 de 6 |
+| Desistiu por não saber o preço | 1 de 6 |
+
+**Como contornam:** ir à cantina antes de todo mundo, ir em outro horário, perguntar o preço a conhecidos, comprar fora ou deixar de comprar.
+**Consequências:** comer em sala, onde é proibido, e a cantina perde vendas.
+
+### 2. Cantina, 1ª conversa (30/10)
+Objetivo: entender **onde a fila trava**.
+
+| Pergunta | Resposta |
+|---|---|
+| Qual o pior horário? | Os intervalos da noite e da manhã |
+| O que mais trava o atendimento? | O preparo de comidas demoradas, como tapioca e cuscuz |
+| O que mais sai? | Coxinha |
+| Quantas pessoas trabalham? | Geralmente 2 |
+| A coxinha já fica pronta? | Sim, mas é esquentada antes de entregar |
+
+### 3. Cantina, 2ª conversa (05/11)
+Objetivo: trocar as estimativas da Entrega 1 por **dados reais**.
+
+| Pergunta | Resposta |
+|---|---|
+| Quanto tempo leva cada item? | Tapioca: 5 min · Cuscuz: 7 a 10 min · Coxinha (esquentar): 2 min |
+| Quantas pessoas atendem por intervalo? | "Muitas". Não souberam dar um número |
+| Dá para adiantar algum preparo? | A tapioca perde a qualidade; o cuscuz pode ser adiantado |
+| Uma pessoa poderia ficar só nos itens rápidos e a outra só no preparo? | **Já trabalham assim:** uma prepara e a outra atende |
+| Quanto custa cada item? | Fotografamos as 3 páginas do cardápio (em `docs/cantina/`) |
+
+### O que a pesquisa mudou no projeto
+- **As duas filas já existem na cozinha, mas o aluno só vê uma.** O app torna visível a divisão que a cantina já faz.
+- **Cuscuz com 10 min (pior caso):** é melhor o app avisar um tempo maior e o pedido sair antes do que prometer um tempo menor e o aluno ficar esperando.
+- **Simulador com 30 alunos:** como a cantina não soube dar um número, usamos o valor sugerido pelo professor.
+
+### Cardápio usado no app
+
+| Item | Tipo | Tempo | Preço |
+|---|---|---|---|
+| Coxinha de frango | Rápido | 2 min | R$ 12,00 |
+| Refrigerante lata | Rápido | 30 s | R$ 8,00 |
+| Tapioca de queijo | Preparado na hora | 5 min | R$ 12,00 |
+| Cuscuz com queijo | Preparado na hora | 10 min | R$ 14,00 |
+
+> O cardápio real tem mais de 30 itens. Escolhemos 2 rápidos e 2 preparados na hora, que bastam para mostrar as duas filas. O tempo do refrigerante (30 s) é estimativa da equipe, porque não foi perguntado à cantina.
 
 ## Decisões da stack
 | Decisão | Escolha | Motivo |
@@ -29,17 +79,14 @@ O **Cantina CESAR** é um app de console (PoC) que responde à pergunta do aluno
 | IA | Claude | gerou a base do código; a equipe revisa e explica cada parte |
 
 ## Papel dos integrantes
-| Integrante | Papel |
-|---|---|
-| Athos | Código principal (`Main`, `Pedido`) e repositório no GitHub |
-| Dani | Vídeo: gravação, edição e legenda |
-| Arthur | Classes de itens (`Item`, `Coxinha`, `Refrigerante`, `Tapioca`, `Cuscuz`) |
-| Almeida | Classes de pagamento (`Pagamento`, `Pix`, `CartaoCredito`, `ValeRefeicao`) |
-| Pierre | README e documentação (`docs/ESTRUTURA.md`) |
-| Caio | Testes do fluxo no terminal e conferência dos princípios no código |
-| André | Roteiro do vídeo e pesquisa (entrevistas, estimativas de preço e tempo) |
+
+<details>
+<summary>Papéis da Entrega 1 (os da Entrega 2 entram quando o código começar)</summary>
+
 
 Todos os integrantes sabem explicar o projeto, e a IA ajudou a escrever o código.
+
+</details>
 
 ## Como rodar
 
@@ -67,14 +114,20 @@ java -Dfile.encoding=UTF-8 -cp out Main
 **Alternativas:** abrir a pasta no IntelliJ ou VS Code (extensão *Extension Pack for Java*) e clicar em Run no `Main.java`; ou usar o **GitHub Codespaces** (*Code → Codespaces*), que já vem com Java.
 
 ## Onde estão os princípios no código
-Esta é a versão **go-horse** (feita para rodar rápido): parte dos princípios já aparece no código, e o restante será aplicado na PoC final.
-
-| Princípio | Onde | Status |
+| Princípio | Onde | Como aparece |
 |---|---|---|
-| Inversão de Dependências | `Item.java`, `Pagamento.java`: o `Main` trabalha com as interfaces, não com as classes concretas | 
-| Aberto/Fechado | `Pix`, `CartaoCredito`, `ValeRefeicao`, `Coxinha`, `Tapioca`...: novo item ou pagamento = classe nova, sem mexer nas outras | (o `Main` ainda registra à mão) |
-| Segregação de Interfaces | `Item` (4 métodos) e `Pagamento` (2 métodos) são pequenas | 
-| Ocultamento de informação | `limite` e `saldo` privados em `CartaoCredito` e `ValeRefeicao` | parcial: `Pedido.status` e `Pedido.itens` são públicos |
-| Responsabilidade Única / Coesão | `Main.java` mistura tela, regra de tempo e fluxo | a corrigir |
-| Integridade conceitual | itens seguem o mesmo padrão; pagamentos também | parcial |
+| Responsabilidade Única | `Main` (só monta), `Console` (só lê), `Tela` (só mostra), `FluxoDePedido` (só orquestra), `PoliticaDeTempo` (regra do "dá tempo?"), `Cardapio` (itens) | o `Main` deixou de ter tela, regra de tempo e cardápio |
+| Aberto/Fechado | `Fila`, `EstimadorDeTempo`, `Item`, `Pagamento`, `Modo` | `EstimadorPorFilas` e `ModoSimulador` entraram como classes novas, sem alterar o fluxo do pedido |
+| Inversão de Dependências | `PoliticaDeTempo` depende de `EstimadorDeTempo`; `FluxoDePedido` depende de interfaces e catálogos | só o `Main` conhece as classes concretas |
+| Segregação de Interfaces | `Item`, `Pagamento`, `Fila`, `EstimadorDeTempo`, `Modo` | todas com 1 a 4 métodos |
+| Ocultamento de informação | `Pedido` (itens e status privados), `CartaoCredito.limite`, `ValeRefeicao.saldo` | `pedido.itens()` devolve cópia imutável; status só muda por `pagarCom` e `avancar` |
+| Coesão | `StatusPedido` (transições num lugar só), `Dinheiro` (formatação) | cada classe usa todos os seus atributos |
+| Acoplamento | `FluxoDePedido` não conhece `Coxinha`, `Pix` nem `FilaRapida` | trocar a fila no `Main` não toca no fluxo |
+| Lei de Demeter | `pedido.pagarCom(pagamento)`, `pedido.itensCom(item)` | ninguém encadeia `pedido.getX().getY()` |
+| Substituição de Liskov | `FilaUnica`, `FilaRapida`, `FilaPreparo` e os dois estimadores | qualquer um entra no lugar do outro sem quebrar `PoliticaDeTempo` nem `Simulador` |
+| Composição em vez de herança | `PoliticaDeTempo` tem um estimador; `EstimadorPorFilas` tem filas | nenhuma classe de domínio herda de outra (só implementam interfaces) |
+| Integridade conceitual | itens, pagamentos e filas seguem o mesmo padrão | catálogos `Cardapio` e `MeiosDePagamento` são análogos |
+| Métricas | `docs/ANTES_E_DEPOIS.md` | complexidade ciclomática do `Main`: 11 → 2 |
+
+Mais detalhes: `docs/ESTRUTURA.md` (classes e fluxo), `docs/ANTES_E_DEPOIS.md` 
 
