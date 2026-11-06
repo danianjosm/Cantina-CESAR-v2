@@ -63,11 +63,11 @@ Objetivo: trocar as estimativas da Entrega 1 por **dados reais**.
 | Item | Tipo | Tempo | Preço |
 |---|---|---|---|
 | Coxinha de frango | Rápido | 2 min | R$ 12,00 |
-| Refrigerante lata | Rápido | 30 s (no app: 1 min) | R$ 8,00 |
+| Refrigerante lata | Rápido | 30 s | R$ 8,00 |
 | Tapioca de queijo | Preparado na hora | 5 min | R$ 12,00 |
 | Cuscuz com queijo | Preparado na hora | 10 min | R$ 14,00 |
 
-> O cardápio real tem mais de 30 itens. Escolhemos 2 rápidos e 2 preparados na hora, que bastam para mostrar as duas filas. O tempo do refrigerante (30 s) é estimativa da equipe, porque não foi perguntado à cantina. No app ele conta como 1 min, porque os tempos são guardados em minutos inteiros.
+> O cardápio real tem mais de 30 itens. Escolhemos 2 rápidos e 2 preparados na hora, que bastam para mostrar as duas filas. O tempo do refrigerante (30 s) é estimativa da equipe, porque não foi perguntado à cantina.
 
 ## Decisões da stack
 | Decisão | Escolha | Motivo |
