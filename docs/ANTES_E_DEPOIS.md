@@ -35,5 +35,5 @@ Método: complexidade ciclomática = 1 + `if`, `for`, `while`, `case`, `catch`, 
 | CBO do `Main` | 10 | 13 |
 | Classes | 11 | 35 |
 
-Panorama geral: a complexidade do `Main` dininuiu e nenhuma classe passa de 5. O CBO do `Main` **subiu**, e isso é esperado: ele virou a raiz de composição, o único lugar que conhece as classes concretas para ligá-las. O acoplamento ficou concentrado ali, e o resto (`FluxoDePedido`, `PoliticaDeTempo`) depende de interfaces. O preço foi ter mais classes, cada uma pequena.
+Panorama geral: a complexidade do `Main` diminuiu e nenhuma classe passa de 5. O CBO do `Main` **subiu**, e isso é esperado: ele virou a raiz de composição, o único lugar que conhece as classes concretas para ligá-las. O acoplamento ficou concentrado ali, e o resto (`FluxoDePedido`, `PoliticaDeTempo`) depende de interfaces. O preço foi ter mais classes, cada uma pequena.
 
